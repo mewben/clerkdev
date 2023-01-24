@@ -1,15 +1,11 @@
 import { encodeB64, getClerkQueryParam } from '../utils';
 
-export const buildUrl = ({ base, path }: { base: string; path: string | undefined }) => {
+export const buildVirtualRouterUrl = ({ base, path }: { base: string; path: string | undefined }) => {
   if (!path) {
     return base;
   }
 
   return base + path;
-};
-
-export const decodeBase64Json = (value: string) => {
-  return JSON.parse(atob(value));
 };
 
 export const readStateParam = () => {
@@ -24,6 +20,7 @@ type SerializeAndAppendModalStateProps = {
   currentPath?: string;
   componentName: string;
 };
+
 export const appendModalState = ({
   url,
   startPath = '/user',
