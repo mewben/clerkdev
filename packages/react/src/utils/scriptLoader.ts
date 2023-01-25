@@ -1,4 +1,5 @@
 import { parsePublishableKey } from '@clerk/shared';
+import type { Clerk as ClerkInterface } from '@clerk/types';
 
 import { LIB_VERSION } from '../info';
 import type { BrowserClerk } from '../types';
@@ -62,20 +63,15 @@ function getScriptSrc({ publishableKey, frontendApi, scriptUrl, scriptVariant = 
 
 export type ScriptVariant = '' | 'headless';
 
-export interface LoadScriptParams {
-  /**
-   * @deprecated Use `publishableKey` instead.
-   */
-  frontendApi?: string;
-  publishableKey?: string;
-  proxyUrl?: string;
+export interface LoadScriptParams
+  extends Pick<ClerkInterface, 'frontendApi' | 'publishableKey' | 'domain' | 'proxyUrl' | 'isSatellite'> {
   scriptUrl?: string;
   scriptVariant?: ScriptVariant;
 }
 
 export async function loadScript(params: LoadScriptParams): Promise<HTMLScriptElement | null> {
   return new Promise((resolve, reject) => {
-    const { frontendApi, publishableKey, proxyUrl } = params;
+    const { frontendApi, publishableKey, proxyUrl, domain, isSatellite } = params;
 
     if (global.Clerk) {
       resolve(null);
@@ -95,6 +91,14 @@ export async function loadScript(params: LoadScriptParams): Promise<HTMLScriptEl
     if (proxyUrl) {
       script.setAttribute('data-clerk-proxy-url', proxyUrl);
     }
+    if (domain) {
+      script.setAttribute('data-clerk-domain', domain);
+    }
+
+    if (isSatellite) {
+      script.setAttribute('data-clerk-is-satellite', isSatellite ? 'true' : 'false');
+    }
+
     script.setAttribute('crossorigin', 'anonymous');
     script.async = true;
 
