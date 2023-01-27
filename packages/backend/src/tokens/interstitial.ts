@@ -69,6 +69,7 @@ export function loadInterstitialFromLocal(options: Omit<LoadInterstitialOptions,
                     ? `script.setAttribute('data-clerk-publishable-key', '${publishableKey}');`
                     : `script.setAttribute('data-clerk-frontend-api', '${frontendApi}');`
                 }
+                script.setAttribute('data-clerk-proxy-url', '${proxyUrl}');
                 script.async = true;
                 script.src = '${getScriptUrl(frontendApi, pkgVersion)}';
                 script.crossOrigin = 'anonymous';
